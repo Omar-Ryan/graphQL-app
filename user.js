@@ -1,4 +1,4 @@
-const { GraphQLSchema, GraphQLObjectType, GraphQLString } = require ( 'graphql');
+// const { GraphQLSchema, GraphQLObjectType, GraphQLString } = require ( 'graphql');
 
 /**
  * Construct a GraphQL schema and define the necessary resolvers.
@@ -7,14 +7,14 @@ const { GraphQLSchema, GraphQLObjectType, GraphQLString } = require ( 'graphql')
  *   hello: String
  * }
  */
-const schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'User',
-    fields: {
-      hello: {
-        type: GraphQLString,
-        resolve: () => 'world',
-      },
-    },
-  }),
-});
+// const schema = new GraphQLSchema({
+//   query: new GraphQLObjectType({
+//     name: 'User',
+//     fields: {
+//       hello: {
+//         type: GraphQLString,
+//         resolve: () => 'world',
+//       },
+//     },
+//   }),
+// });

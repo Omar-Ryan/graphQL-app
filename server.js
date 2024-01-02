@@ -1,40 +1,57 @@
-/* const express = require("express");
+const express = require("express");
 const app = express();
 const port = 3000;
-const {buildSchema} = require("graphql");
+const { buildSchema } = require("graphql");
 // const {createHandler} = require("graphql-http");
-const {graphqlHTTP} = require("express-graphql");
+const { graphqlHTTP } = require("express-graphql");
+require("./connection");
+const User = require("./modules/Users");
 
+const schema = buildSchema(`
+    type User {
+        name : String!
+        email:String!
+    }
 
+    input UserInput {
+        name:String!
+        email:String!
+        password : String!
+    }
 
-
-const schema = buildSchema(
     type Query{
         test:String
     }
-    )
-    
-    const resolvers = {
-        test:()=> "success"
+
+    type Mutation {
+        userCreate(input:UserInput) : User
     }
-    
 
-app.use("/graphql" , graphqlHTTP({schema , rootValue ,resolvers , graphiql:true }))
+`);
 
-app.listen( port, () => {
+const userQueries = {
+  test: () => "success",
+};
+
+const userMutations = {
+  userCreate: async ({ input }) => {
+    const { name, email, password } = input;
+    const UserCreated = new User({ name, email, password });
+    await UserCreated.save();
+    return {
+      name,
+      email,
+    };
+  },
+};
+
+const resolvers = {
+  ...userQueries,
+  ...userMutations,
+};
+
+app.use("/graphql", graphqlHTTP({ schema, resolvers, graphiql: true }));
+
+app.listen(port, () => {
   console.log(`the server is working on port : ${port}`);
-}); */
-
-const express = require("express");
-const { createHandler } = require ('graphql-http/lib/use/express');
-const { schema } = require ( './user');
-
-// Create a express instance serving all methods on `/graphql`
-// where the GraphQL over HTTP express request handler is
-const app = express();
-const port = 3000;
-app.all('/graphql', createHandler({ schema }));
-
-app.listen(port , ()=>{
-    console.log(` Listening to port ${port}`);
 });
